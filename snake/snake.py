@@ -44,10 +44,24 @@ class SNAKE:
             
             else:
                 previous_block = self.body[index + 1] - block
-                next_block = self.body[index -1]
+                next_block = self.body[index - 1] - block
+                if previous_block.x == next_block.x:
+                    screen.blit(self.body_vertical,block_rect)
+                elif previous_block.y == next_block.y:
+                    screen.blit(self.body_horizontal,block_rect)
+                else:
+                    if previous_block.x == -1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == -1:
+                        screen.blit(self.body_tl,block_rect)
+                    elif previous_block.x == -1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == -1:
+                        screen.blit(self.body_bl,block_rect)
+                    elif previous_block.x == 1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == 1:
+                        screen.blit(self.body_tr,block_rect)
+                    elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
+                        screen.blit(self.body_br,block_rect)
 
-            else:
-                pygame.draw.rect(screen,(150,100,100),block_rect)
+
+            # else:
+            #    pygame.draw.rect(screen,(150,100,100),block_rect)
 
     def update_head_graphics(self):
         head_relation = self.body[1] - self.body[0]
@@ -111,6 +125,7 @@ class MAIN:
         self.check_fail( )
 
     def draw_elements(self):
+        self.draw_grass()
         self.fruit.draw_fruit()
         self.snake.draw_snake()
 
@@ -130,6 +145,20 @@ class MAIN:
     def game_over(self):
             pygame.quit()
             sys.exit()
+
+    def draw_grass(self):
+        grass_color = (167,209,61)
+        for row in range(cell_number):
+            if row % 2 == 0: 
+                for col in range(cell_number):
+                    if col % 2 == 0:
+                        grass_rect = pygame.Rect(col * cell_size,row * cell_size,cell_size,cell_size)
+                        pygame.draw.rect(screen,grass_color,grass_rect)
+            else:
+                for col in range(cell_number):
+                    if col % 2 != 0:
+                        grass_rect = pygame.Rect(col * cell_size,row * cell_size,cell_size,cell_size)
+                        pygame.draw.rect(screen,grass_color,grass_rect)			
 
 pygame.init()
 cell_size = 40
